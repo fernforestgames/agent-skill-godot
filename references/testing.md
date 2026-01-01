@@ -33,6 +33,9 @@ Test cases should be scripts that extend `GutTest`:
 ```gdscript
 extends GutTest
 
+# GUT assertions are untyped, so disable this warning
+@warning_ignore_start("unsafe_call_argument")
+
 func before_all():
 	pass
 
