@@ -66,3 +66,7 @@ Use the `ide:getDiagnostics` tool to check for any syntax or typechecking errors
 ### Step 7: Test the changes
 
 Use the testing workflow described in [testing.md](references/testing.md) to test your changes.
+
+## Godot resource files (.tres, .tscn)
+
+- NEVER manually assign or generate `uid://` fields—Godot fills these in automatically
