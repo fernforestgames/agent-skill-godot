@@ -23,8 +23,8 @@ Read any relevant GDScript source files in the current project.
 
 **Step 2: Look up relevant Godot documentation**
 
-Use the `godot:get_godot_class` tool
-Use the `godot:search_godot_docs` tool 
+Use the `godot:get_godot_class` tool to look up everything about a specific Godot class.
+Use the `godot:search_godot_docs` tool to find a string in the Godot documentation.
 
 **Step 3: Write or modify GDScript code**
 
