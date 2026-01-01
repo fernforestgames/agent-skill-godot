@@ -1,9 +1,11 @@
 ---
 name: godot
-description: Develop games using the Godot engine. Use when the project directory contains a "project.godot" file. Requires Godot 4 and the `godot` MCP server (npm package `@fernforestgames/mcp-server-godot`) to be installed.
+description: "MANDATORY for ALL GDScript/.gd files and Godot resources (.tscn, .tres). Invoke this skill FIRST before writing ANY Godot code—never write GDScript directly without this skill. Provides documentation lookup, syntax checking, and testing instructions."
 ---
 
 # Godot development
+
+Requires Godot 4 and the `godot` MCP server (npm package `@fernforestgames/mcp-server-godot`) to be installed.
 
 ## GDScript workflow
 
