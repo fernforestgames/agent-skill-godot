@@ -70,3 +70,13 @@ Use the testing workflow described in [testing.md](references/testing.md) to tes
 ## Godot resource files (.tres, .tscn)
 
 - NEVER manually assign or generate `uid://` fields—Godot fills these in automatically
+
+### Connecting @exports in scene files
+
+When a script uses `@export var some_node: SomeNodeType`, you can assign it via a `.tscn` file:
+```
+[node name="MyNode" type="Node3D" parent="." node_paths=PackedStringArray("player", "camera")]
+script = ExtResource("1_abc123")
+player = NodePath("../Player")
+camera = NodePath("CameraPivot/Camera3D")
+```
