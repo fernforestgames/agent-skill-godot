@@ -16,7 +16,7 @@ When writing or modifying GDScript, copy this checklist and track your progress:
 - [ ] Step 2: Look up relevant Godot documentation
 - [ ] Step 3: Write or modify GDScript code
 - [ ] Step 4: Import new files with Godot CLI
-- [ ] Step 5: Run syntax and typechecking with Godot CLI
+- [ ] Step 5: Typecheck and validate syntax
 - [ ] Step 6: Use LSP to check for errors and warnings
 - [ ] Step 7: Test the changes
 ```
@@ -51,15 +51,13 @@ godot --headless --import
 
 This should be run in the project root directory (where `project.godot` is located).
 
-### Step 5: Run syntax and typechecking with Godot CLI
+### Step 5: Typecheck and validate syntax
 
-Pass an individual script file to the Godot CLI to check for syntax and typechecking errors:
+Use the provided script to check the syntax of all GDScript files in the project:
 
 ```sh
-godot --headless --script SCRIPT_FILE.gd --check-only
+scripts/check_syntax.sh
 ```
-
-This should be run in the project root directory (where `project.godot` is located).
 
 ### Step 6: Use LSP to check for errors and warnings
 
