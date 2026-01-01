@@ -56,6 +56,16 @@ Use the `ide:getDiagnostics` tool to check for any syntax or typechecking errors
 
 **Step 7: Launch the project to verify it runs correctly**
 
-Run the project using the Godot CLI to make sure it launches successfully (you can also pass a `.tscn` filepath to launch a specific scene).
+Run the project using the Godot CLI to make sure it launches successfully:
+
+```sh
+godot
+```
+
+You can also pass a `.tscn` filepath to run a specific scene:
+
+```sh
+godot scene.tscn
+```
 
 Make sure you have an automatic exit in there, or a way to time out the process, because it will run forever by default! 
