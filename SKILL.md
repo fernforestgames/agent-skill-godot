@@ -49,7 +49,7 @@ Run the Godot CLI with `--import` after adding new files, to make sure they get 
 godot --headless --import
 ```
 
-This should be run in the project root directory (where `project.godot` is located).
+This should be run in the project root directory (where `project.godot` is located). Remember that any folder containing `.gdignore` will be skipped during import.
 
 ### Step 5: Typecheck and validate syntax
 
