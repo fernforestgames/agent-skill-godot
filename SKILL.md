@@ -197,6 +197,8 @@ GUT is configured with an optional `res://.gutconfig.json` file. A sample can be
 godot --headless --script addons/gut/gut_cmdln.gd -gprint_gutconfig_sample
 ```
 
+You can also use GUT to programmatically play the game, and take screenshots using `Viewport.get_texture().get_image()` if not running headless. This can help you verify what's happening in the game visually.
+
 ## Godot resource files (.tres, .tscn)
 
 - NEVER manually assign or generate `uid://` fields—Godot fills these in automatically
