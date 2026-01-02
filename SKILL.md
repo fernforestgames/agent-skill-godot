@@ -5,7 +5,7 @@ description: "MANDATORY for ALL GDScript/.gd files and Godot resources (.tscn, .
 
 # Godot development
 
-Requires Godot 4 and the `godot` MCP server (npm package `@fernforestgames/mcp-server-godot`) to be installed.
+Requires Godot 4 and the `godot-docs` MCP server (npm package `@fernforestgames/mcp-server-godot-docs`) to be installed.
 
 ## GDScript workflow
 
@@ -27,8 +27,8 @@ Read any relevant GDScript source files in the current project.
 
 ### Step 2: Look up relevant Godot documentation
 
-Use the `godot:get_godot_class` tool to look up everything about a specific Godot class.
-Use the `godot:search_godot_docs` tool to find a string in the Godot documentation.
+Use the `godot-docs:get_godot_class` tool to look up everything about a specific Godot class.
+Use the `godot-docs:search_godot_docs` tool to find a string in the Godot documentation.
 
 ### Step 3: Write or modify GDScript code
 
