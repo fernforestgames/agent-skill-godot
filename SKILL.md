@@ -197,7 +197,11 @@ GUT is configured with an optional `res://.gutconfig.json` file. A sample can be
 godot --headless --script addons/gut/gut_cmdln.gd -gprint_gutconfig_sample
 ```
 
-You can also use GUT to programmatically play the game, and take screenshots using `Viewport.get_texture().get_image()` if not running headless. This can help you verify what's happening in the game visually.
+#### Visual testing with screenshots
+
+To verify rendering, write GUT tests that capture screenshots via `get_viewport().get_texture().get_image()` and save them to `tests/screenshots/`. After running (without `--headless`), use the `Read` tool to view the saved PNGs and verify visuals.
+
+The screenshot directory should be in `.gitignore` and contain a `.gdignore` file to prevent Godot from importing the images.
 
 ## Godot resource files (.tres, .tscn)
 
