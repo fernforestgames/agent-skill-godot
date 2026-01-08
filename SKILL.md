@@ -8,7 +8,7 @@ description: "MANDATORY for ALL GDScript/.gd files and Godot resources (.tscn, .
 Requirements:
 - Godot 4+
 - `godot-docs` MCP server (npm package `@fernforestgames/mcp-server-godot-docs`)
-- `godot-editor` MCP server (GitHub project `fernforestgames/mcp-server-godot-editor` installed into `addons/` in the current project)
+- `godot-editor` MCP server (GitHub project `fernforestgames/mcp-server-godot-editor` installed into `addons/`)
 
 ## GDScript workflow
 
@@ -186,7 +186,7 @@ godot --headless --script addons/gut/gut_cmdln.gd -gprint_gutconfig_sample
 
 ### Interactive testing with the Godot Editor MCP server
 
-The `godot-editor` MCP server allows you to control running games from the editor, enabling automated UI testing and visual verification. This is the preferred method for testing UI interactions and verifying visual output.
+The `godot-editor` MCP server allows you to control running games from the editor, enabling automated UI testing and visual verification.
 
 #### Starting and stopping scenes
 
@@ -200,76 +200,41 @@ godot-editor:stop_playing_scene   # Stop the currently running scene
 
 #### Taking screenshots
 
-Use `godot-editor:take_screenshot` to capture the current game viewport. The screenshot is returned as an image that you can view directly:
+Use `godot-editor:take_screenshot` to capture the current game viewport. The screenshot is returned as an image that you can view directly.
 
-1. `godot-editor:play_main_scene`
-2. `godot-editor:take_screenshot`
-3. (Verify the screenshot shows expected content)
-4. `godot-editor:stop_playing_scene`
+#### Input synthesis
 
-#### Synthesizing input
+Use `godot-editor:synthesize_input` to simulate user input events.
 
-Use `godot-editor:synthesize_input` to inject keyboard, mouse, and gamepad events into the running game.
+For example:
+- `type: "key", keycode: "Space", pressed: true` (uses Key enum names)
+- `type: "mouse_button", button_index: 1, position: {x, y}, pressed: true`
+- `type: "mouse_motion", position: {x, y}`
+- `type: "action", action: "ui_accept", pressed: true`
 
-**Keyboard input:**
-```
-type: "key"
-keycode: "Space"  # Key names from Godot's Key enum: A-Z, 0-9, F1-F12, Space, Enter, Escape, Shift, Ctrl, Alt, etc.
-pressed: true/false
-```
+#### Node interaction
 
-**Mouse button:**
-```
-type: "mouse_button"
-button_index: 1  # MouseButton enum: 1=LEFT, 2=RIGHT, 3=MIDDLE, 4=WHEEL_UP, 5=WHEEL_DOWN
-position: {x: 100, y: 200}
-pressed: true/false
-```
+Use `godot-editor:click_node` and `godot-editor:hover_node` to interact with nodes without knowing their screen position.
 
-**Mouse motion:**
-```
-type: "mouse_motion"
-position: {x: 100, y: 200}
-relative: {x: 10, y: 0}  # Optional relative movement
-```
+**Identification** (use exactly one):
+- `node_path: "Main/UI/Button"` (relative to /root)
+- `unique_name`: Scene-unique `%` nodes
+- `accessibility_name`: Control's `accessibility_name` property
 
-**Action (from Input Map):**
-```
-type: "action"
-action: "ui_accept"  # Action name from project's Input Map
-pressed: true/false
-strength: 1.0  # Optional, 0.0-1.0
-```
+Works with Control, Node2D, and Node3D (projected via camera).
 
-#### Clicking and hovering nodes
-
-Instead of calculating screen coordinates manually, use `godot-editor:click_node` and `godot-editor:hover_node` to interact with nodes by name.
-
-**Node identification methods** (provide exactly one):
-- `node_path`: Absolute path like `"Main/UI/StartButton"` (relative to `/root`)
-- `unique_name`: Scene-unique name for nodes marked with `%` in the editor (e.g., `"StartButton"`)
-- `accessibility_name`: The `accessibility_name` property of Control nodes
-
-**Clicking a node:**
+Examples:
 ```
 godot-editor:click_node
   unique_name: "StartButton"
   button_index: 1  # Optional, defaults to left click
   offset: {x: 0, y: 0}  # Optional offset from center
-```
 
-**Hovering a node (for tooltips, hover states):**
-```
 godot-editor:hover_node
   unique_name: "InventorySlot"
 ```
 
-**Supported node types:**
-- **Control** - Clicks/hovers at the center of the control's rect
-- **Node2D** - Uses the node's global_position
-- **Node3D** - Projects 3D position to screen coordinates using the active camera
-
-**Example workflow for UI testing:**
+#### Example workflow for UI testing
 
 1. `godot-editor:play_main_scene`
 2. `godot-editor:take_screenshot`, verify initial state
