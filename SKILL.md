@@ -5,7 +5,10 @@ description: "MANDATORY for ALL GDScript/.gd files and Godot resources (.tscn, .
 
 # Godot development
 
-Requires Godot 4 and the `godot-docs` MCP server (npm package `@fernforestgames/mcp-server-godot-docs`) to be installed.
+Requirements:
+- Godot 4+
+- `godot-docs` MCP server (npm package `@fernforestgames/mcp-server-godot-docs`)
+- `godot-editor` MCP server (GitHub project `fernforestgames/mcp-server-godot-editor` installed into `addons/` in the current project)
 
 ## GDScript workflow
 
