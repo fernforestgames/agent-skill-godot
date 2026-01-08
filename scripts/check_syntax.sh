@@ -31,7 +31,7 @@ while IFS= read -r -d '' file; do
     else
         echo "OK: $rel_path"
     fi
-done < <(find "$PROJECT_PATH" -name "*.gd" -type f -print0 | grep -zv ".godot")
+done < <(find "$PROJECT_PATH" -name "*.gd" -type f -print0 | grep -zv -e ".godot" -e "/addons/")
 
 echo "---"
 echo "Checked: $checked files"
