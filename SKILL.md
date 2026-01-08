@@ -82,6 +82,8 @@ https://gut.readthedocs.io
 
 If not already present in the current project in the `addons/` directory, do NOT attempt to install it. Ask the user to install it from the Godot Asset Library instead.
 
+**Important:** use a sub-agent to write and run GUT tests, as this consumes a lot of tokens.
+
 #### Writing tests
 
 Test cases should be scripts that extend `GutTest`:
