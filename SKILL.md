@@ -72,22 +72,6 @@ Use the testing workflow described below to test your changes.
 
 ## Testing workflow
 
-### Manual testing
-
-Run the project using the Godot CLI to make sure it launches successfully:
-
-```sh
-godot
-```
-
-This should be run in the project root directory (where `project.godot` is located). Background the task, because it will run forever by default!
-
-You can also pass a `.tscn` filepath to run a specific scene:
-
-```sh
-godot scene.tscn
-```
-
 ### Automated tests
 
 Unit tests can be written with the GUT (Godot Unit Test) framework:
@@ -200,11 +184,100 @@ GUT is configured with an optional `res://.gutconfig.json` file. A sample can be
 godot --headless --script addons/gut/gut_cmdln.gd -gprint_gutconfig_sample
 ```
 
-#### Visual testing with screenshots
+### Interactive testing with the Godot Editor MCP server
 
-To verify rendering, write GUT tests that capture screenshots via `get_viewport().get_texture().get_image()` and save them to `tests/screenshots/`. After running (without `--headless`), use the `Read` tool to view the saved PNGs and verify visuals.
+The `godot-editor` MCP server allows you to control running games from the editor, enabling automated UI testing and visual verification. This is the preferred method for testing UI interactions and verifying visual output.
 
-The screenshot directory should be in `.gitignore` and contain a `.gdignore` file to prevent Godot from importing the images.
+#### Starting and stopping scenes
+
+```
+godot-editor:play_main_scene      # Start the project's main scene
+godot-editor:play_scene           # Start a specific scene by path (e.g., "res://levels/test.tscn")
+godot-editor:stop_playing_scene   # Stop the currently running scene
+```
+
+**Important:** Always follow up `play_main_scene` or `play_scene` with another action (screenshot, input, etc.) or `stop_playing_scene`. Never leave a scene running indefinitely.
+
+#### Taking screenshots
+
+Use `godot-editor:take_screenshot` to capture the current game viewport. The screenshot is returned as an image that you can view directly:
+
+1. `godot-editor:play_main_scene`
+2. `godot-editor:take_screenshot`
+3. (Verify the screenshot shows expected content)
+4. `godot-editor:stop_playing_scene`
+
+#### Synthesizing input
+
+Use `godot-editor:synthesize_input` to inject keyboard, mouse, and gamepad events into the running game.
+
+**Keyboard input:**
+```
+type: "key"
+keycode: "Space"  # Key names from Godot's Key enum: A-Z, 0-9, F1-F12, Space, Enter, Escape, Shift, Ctrl, Alt, etc.
+pressed: true/false
+```
+
+**Mouse button:**
+```
+type: "mouse_button"
+button_index: 1  # MouseButton enum: 1=LEFT, 2=RIGHT, 3=MIDDLE, 4=WHEEL_UP, 5=WHEEL_DOWN
+position: {x: 100, y: 200}
+pressed: true/false
+```
+
+**Mouse motion:**
+```
+type: "mouse_motion"
+position: {x: 100, y: 200}
+relative: {x: 10, y: 0}  # Optional relative movement
+```
+
+**Action (from Input Map):**
+```
+type: "action"
+action: "ui_accept"  # Action name from project's Input Map
+pressed: true/false
+strength: 1.0  # Optional, 0.0-1.0
+```
+
+#### Clicking and hovering nodes
+
+Instead of calculating screen coordinates manually, use `godot-editor:click_node` and `godot-editor:hover_node` to interact with nodes by name.
+
+**Node identification methods** (provide exactly one):
+- `node_path`: Absolute path like `"Main/UI/StartButton"` (relative to `/root`)
+- `unique_name`: Scene-unique name for nodes marked with `%` in the editor (e.g., `"StartButton"`)
+- `accessibility_name`: The `accessibility_name` property of Control nodes
+
+**Clicking a node:**
+```
+godot-editor:click_node
+  unique_name: "StartButton"
+  button_index: 1  # Optional, defaults to left click
+  offset: {x: 0, y: 0}  # Optional offset from center
+```
+
+**Hovering a node (for tooltips, hover states):**
+```
+godot-editor:hover_node
+  unique_name: "InventorySlot"
+```
+
+**Supported node types:**
+- **Control** - Clicks/hovers at the center of the control's rect
+- **Node2D** - Uses the node's global_position
+- **Node3D** - Projects 3D position to screen coordinates using the active camera
+
+**Example workflow for UI testing:**
+
+1. `godot-editor:play_main_scene`
+2. `godot-editor:take_screenshot`, verify initial state
+3. `godot-editor:hover_node` with unique_name "PlayButton"
+4. `godot-editor:take_screenshot`, verify hover visual feedback
+5. `godot-editor:click_node` with unique_name "PlayButton"
+6. `godot-editor:take_screenshot`, verify button was clicked (new screen, animation, etc.)
+7. `godot-editor:stop_playing_scene`
 
 ## Godot resource files (.tres, .tscn)
 
