@@ -5,7 +5,10 @@ description: "MANDATORY for ALL GDScript/.gd files and Godot resources (.tscn, .
 
 # Godot development
 
-Requires Godot 4 and the `godot-docs` MCP server (npm package `@fernforestgames/mcp-server-godot-docs`) to be installed.
+Requirements:
+- Godot 4+
+- `godot-docs` MCP server (npm package `@fernforestgames/mcp-server-godot-docs`)
+- `godot-editor` MCP server (GitHub project `fernforestgames/mcp-server-godot-editor` installed into `addons/`)
 
 ## GDScript workflow
 
@@ -68,22 +71,6 @@ Use the `ide:getDiagnostics` tool to check for any syntax or typechecking errors
 Use the testing workflow described below to test your changes.
 
 ## Testing workflow
-
-### Manual testing
-
-Run the project using the Godot CLI to make sure it launches successfully:
-
-```sh
-godot
-```
-
-This should be run in the project root directory (where `project.godot` is located). Background the task, because it will run forever by default!
-
-You can also pass a `.tscn` filepath to run a specific scene:
-
-```sh
-godot scene.tscn
-```
 
 ### Automated tests
 
@@ -197,11 +184,65 @@ GUT is configured with an optional `res://.gutconfig.json` file. A sample can be
 godot --headless --script addons/gut/gut_cmdln.gd -gprint_gutconfig_sample
 ```
 
-#### Visual testing with screenshots
+### Interactive testing with the Godot Editor MCP server
 
-To verify rendering, write GUT tests that capture screenshots via `get_viewport().get_texture().get_image()` and save them to `tests/screenshots/`. After running (without `--headless`), use the `Read` tool to view the saved PNGs and verify visuals.
+The `godot-editor` MCP server allows you to control running games from the editor, enabling automated UI testing and visual verification.
 
-The screenshot directory should be in `.gitignore` and contain a `.gdignore` file to prevent Godot from importing the images.
+#### Starting and stopping scenes
+
+```
+godot-editor:play_main_scene      # Start the project's main scene
+godot-editor:play_scene           # Start a specific scene by path (e.g., "res://levels/test.tscn")
+godot-editor:stop_playing_scene   # Stop the currently running scene
+```
+
+**Important:** Always follow up `play_main_scene` or `play_scene` with another action (screenshot, input, etc.) or `stop_playing_scene`. Never leave a scene running indefinitely.
+
+#### Taking screenshots
+
+Use `godot-editor:take_screenshot` to capture the current game viewport. The screenshot is returned as an image that you can view directly.
+
+#### Input synthesis
+
+Use `godot-editor:synthesize_input` to simulate user input events.
+
+For example:
+- `type: "key", keycode: "Space", pressed: true` (uses Key enum names)
+- `type: "mouse_button", button_index: 1, position: {x, y}, pressed: true`
+- `type: "mouse_motion", position: {x, y}`
+- `type: "action", action: "ui_accept", pressed: true`
+
+#### Node interaction
+
+Use `godot-editor:click_node` and `godot-editor:hover_node` to interact with nodes without knowing their screen position.
+
+**Identification** (use exactly one):
+- `node_path: "Main/UI/Button"` (relative to /root)
+- `unique_name`: Scene-unique `%` nodes
+- `accessibility_name`: Control's `accessibility_name` property
+
+Works with Control, Node2D, and Node3D (projected via camera).
+
+Examples:
+```
+godot-editor:click_node
+  unique_name: "StartButton"
+  button_index: 1  # Optional, defaults to left click
+  offset: {x: 0, y: 0}  # Optional offset from center
+
+godot-editor:hover_node
+  unique_name: "InventorySlot"
+```
+
+#### Example workflow for UI testing
+
+1. `godot-editor:play_main_scene`
+2. `godot-editor:take_screenshot`, verify initial state
+3. `godot-editor:hover_node` with unique_name "PlayButton"
+4. `godot-editor:take_screenshot`, verify hover visual feedback
+5. `godot-editor:click_node` with unique_name "PlayButton"
+6. `godot-editor:take_screenshot`, verify button was clicked (new screen, animation, etc.)
+7. `godot-editor:stop_playing_scene`
 
 ## Godot resource files (.tres, .tscn)
 
