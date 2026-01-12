@@ -20,8 +20,7 @@ When writing or modifying GDScript, copy this checklist and track your progress:
 - [ ] Step 3: Write or modify GDScript code
 - [ ] Step 4: Import new files with Godot CLI
 - [ ] Step 5: Typecheck and validate syntax
-- [ ] Step 6: Use LSP to check for errors and warnings
-- [ ] Step 7: Test the changes
+- [ ] Step 6: Test the changes
 ```
 
 ### Step 1: Read source files
@@ -64,11 +63,7 @@ For example:
 ./claude/skills/godot/scripts/check_syntax.sh
 ```
 
-### Step 6: Use LSP to check for errors and warnings
-
-Use the `ide:getDiagnostics` tool to check for any syntax or typechecking errors reported by the Godot LSP server. Note that this will only work correctly after `godot --import` (or else you may see spurious/out-of-date information), and only if the LSP server is running.
-
-### Step 7: Test the changes
+### Step 6: Test the changes
 
 Use the testing workflow described below to test your changes.
 
