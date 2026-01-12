@@ -56,7 +56,7 @@ This should be run in the project root directory (where `project.godot` is locat
 
 ### Step 5: Typecheck and validate syntax
 
-Use the provided `check_syntax.sh` script to check the syntax of all GDScript files in the project.
+Directly invoke the provided `check_syntax.sh` script to check the syntax of all GDScript files in the project.
 
 For example:
 
