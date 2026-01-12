@@ -201,9 +201,26 @@ godot-editor:stop_playing_scene   # Stop the currently running scene
 
 Use `godot-editor:take_screenshot` to capture the current game viewport. The screenshot is returned as an image that you can view directly.
 
+#### Node interaction
+
+Use `godot-editor:click_node` and `godot-editor:hover_node` to interact with controls and nodes (2D or 3D). Use `godot-editor:get_node_tree` to inspect the current scene tree and determine node paths.
+
+```
+godot-editor:click_node
+  node_path: "/root/Main/UI/StartButton"
+  button_index: 1  # Optional, defaults to left click
+  offset: {x: 0, y: 0}  # Optional offset from center
+
+godot-editor:hover_node
+  unique_name: "InventorySlot"
+
+godot-editor:click_node
+  accessibility_name: "SubmitButton"
+```
+
 #### Input synthesis
 
-Use `godot-editor:synthesize_input` to simulate user input events.
+Use `godot-editor:synthesize_input` to simulate user input events (only if you cannot use `click_node` or `hover_node`).
 
 For example:
 - `type: "key", keycode: "Space", pressed: true` (uses Key enum names)
@@ -211,37 +228,16 @@ For example:
 - `type: "mouse_motion", position: {x, y}`
 - `type: "action", action: "ui_accept", pressed: true`
 
-#### Node interaction
-
-Use `godot-editor:click_node` and `godot-editor:hover_node` to interact with nodes without knowing their screen position.
-
-**Identification** (use exactly one):
-- `node_path: "Main/UI/Button"` (relative to /root)
-- `unique_name`: Scene-unique `%` nodes
-- `accessibility_name`: Control's `accessibility_name` property
-
-Works with Control, Node2D, and Node3D (projected via camera).
-
-Examples:
-```
-godot-editor:click_node
-  unique_name: "StartButton"
-  button_index: 1  # Optional, defaults to left click
-  offset: {x: 0, y: 0}  # Optional offset from center
-
-godot-editor:hover_node
-  unique_name: "InventorySlot"
-```
-
 #### Example workflow for UI testing
 
 1. `godot-editor:play_main_scene`
 2. `godot-editor:take_screenshot`, verify initial state
-3. `godot-editor:hover_node` with unique_name "PlayButton"
-4. `godot-editor:take_screenshot`, verify hover visual feedback
-5. `godot-editor:click_node` with unique_name "PlayButton"
-6. `godot-editor:take_screenshot`, verify button was clicked (new screen, animation, etc.)
-7. `godot-editor:stop_playing_scene`
+3. `godot-editor:get_node_tree`, check node paths
+4. `godot-editor:hover_node` with unique_name "PlayButton"
+5. `godot-editor:take_screenshot`, verify hover visual feedback
+6. `godot-editor:click_node` with unique_name "PlayButton"
+7. `godot-editor:take_screenshot`, verify button was clicked (new screen, animation, etc.)
+8. `godot-editor:stop_playing_scene`
 
 ## Godot resource files (.tres, .tscn)
 
