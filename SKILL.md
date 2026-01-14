@@ -60,7 +60,7 @@ Directly invoke the provided `check_syntax.sh` script to check the syntax of all
 For example:
 
 ```sh
-./claude/skills/godot/scripts/check_syntax.sh
+./.claude/skills/godot/scripts/check_syntax.sh
 ```
 
 ### Step 6: Test the changes
